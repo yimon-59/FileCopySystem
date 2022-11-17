@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FileCopySystem));
             this.dtpDate = new System.Windows.Forms.DateTimePicker();
             this.btncopy = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -58,9 +59,9 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.btncopy);
             this.Controls.Add(this.dtpDate);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "FileCopySystem";
-            this.ShowIcon = false;
             this.Text = "FileCopy System";
             this.Load += new System.EventHandler(this.FileCopySystem_Load);
             this.ResumeLayout(false);

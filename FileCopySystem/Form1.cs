@@ -27,6 +27,37 @@ namespace FileCopySystem
         }
 
         /// <summary>
+        /// load for file copy system
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void FileCopySystem_Load(object sender, EventArgs e)
+        {
+            System.Windows.Threading.DispatcherTimer timer = new System.Windows.Threading.DispatcherTimer();
+            timer.Interval = new TimeSpan(0, 1, 0);
+            //Time when method needs to be called
+            string DailyTime = ConfigurationManager.AppSettings["TimeSchedule"];
+            DateTime date = Convert.ToDateTime(DailyTime);
+            while (DateTime.Today.DayOfWeek != DayOfWeek.Sunday || DateTime.Today.DayOfWeek != DayOfWeek.Saturday)
+            {
+                var dateNow = DateTime.Now;
+                
+                TimeSpan ts;
+                if (date > dateNow)
+                    ts = date - dateNow;
+                else
+                {
+                    date = date.AddDays(1);
+                    ts = date - dateNow;
+                }
+
+                //waits certan time and run the code
+                Task.Delay(ts).ContinueWith((x) => btncopy_Click(null, null));
+                Console.Read();
+            }
+        }
+
+        /// <summary>
         /// File copy process
         /// </summary>
         /// <param name="sender"></param>
@@ -55,10 +86,10 @@ namespace FileCopySystem
                     var currentMonth = DateTime.Now.ToString("MM");
                     var currentMonthAndYear = @"\" + currentMonth + currentYear;
                     string destPath = destinationFilePath + currentMonthAndYear;
-                    
+
                     //edit destination filename
                     destName = destName + "_" + currentDay + "_" + currentMonth + "_" + currentYear + ".xlsx";
-                   
+
                     // If directory does not exist, create it. 
                     if (!Directory.Exists(destPath))
                     {
@@ -79,34 +110,6 @@ namespace FileCopySystem
             catch (DirectoryNotFoundException dirNotFound)
             {
                 Console.WriteLine(dirNotFound.Message);
-            }
-
-        }
-
-        private void FileCopySystem_Load(object sender, EventArgs e)
-        {
-            System.Windows.Threading.DispatcherTimer timer = new System.Windows.Threading.DispatcherTimer();
-            timer.Interval = new TimeSpan(0, 1, 0);
-            //Time when method needs to be called
-            string DailyTime = ConfigurationManager.AppSettings["TimeSchedule"];
-            var timeParts = DailyTime.Split(new char[1] { ':' });
-            while (true)
-            {
-                var dateNow = DateTime.Now;
-                var date = new DateTime(dateNow.Year, dateNow.Month, dateNow.Day,
-                           int.Parse(timeParts[0]), int.Parse(timeParts[1]), int.Parse(timeParts[2]));
-                TimeSpan ts;
-                if (date > dateNow)
-                    ts = date - dateNow;
-                else
-                {
-                    date = date.AddDays(1);
-                    ts = date - dateNow;
-                }
-
-                //waits certan time and run the code
-                Task.Delay(ts).ContinueWith((x) => btncopy_Click(null, null));
-                Console.Read();
             }
         }
     }
